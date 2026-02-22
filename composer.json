@@ -1,0 +1,7 @@
+{
+    "name": "banner/generator",
+    "description": "Video Banner Generator with Telegram Mini App",
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
+    }
+}

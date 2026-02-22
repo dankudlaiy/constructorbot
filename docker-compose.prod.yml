@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-banner_user}
+      POSTGRES_PASSWORD: ${DB_PASS:-banner_pass}
+      POSTGRES_DB: ${DB_NAME:-banner_db}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - internal
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - .:/var/www/html
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+      - ./.env:/var/www/.env
+      - vendor_data:/var/www/vendor
+      - ./uploads:/var/www/html/uploads
+      - ./outputs:/var/www/html/outputs
+    environment:
+      DATABASE_URL: postgres://${DB_USER:-banner_user}:${DB_PASS:-banner_pass}@db:5432/${DB_NAME:-banner_db}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_TOKEN_COLDBET: ${TELEGRAM_BOT_TOKEN_COLDBET}
+      TELEGRAM_BOT_TOKEN_SPINBETTER: ${TELEGRAM_BOT_TOKEN_SPINBETTER}
+      APP_URL: ${APP_URL}
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASS: ${ADMIN_PASS}
+    depends_on:
+      - db
+    networks:
+      - internal
+
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    networks:
+      - internal
+
+volumes:
+  pgdata:
+  vendor_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:
+    driver: bridge

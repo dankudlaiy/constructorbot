@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(brew install:*)",
+      "Bash(docker compose:*)",
+      "Bash(npm install:*)",
+      "Bash(npx webpack:*)",
+      "Bash(dir:*)",
+      "Bash(del \"D:\\\\w\\\\constructorbot\\\\admin_page.php\")",
+      "Bash(npm run build:*)",
+      "Bash(node_modules/.bin/webpack:*)",
+      "Bash(node node_modules/webpack/bin/webpack.js:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(test:*)",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''D:\\\\w\\\\constructorbot'' -Recurse -MaxDepth 2 | Where-Object {$_PSIsContainer} | Select-Object FullName | ForEach-Object {$_FullName}\")",
+      "Bash(powershell -Command:*)",
+      "WebFetch(domain:docs.google.com)",
+      "WebFetch(domain:doc-0c-94-docstext.googleusercontent.com)",
+      "mcp__Figma__get_metadata"
+    ]
+  }
+}

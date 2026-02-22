@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+dist/
+miniapp/dist/
+
+# Environment & secrets
+.env
+
+# Uploads & generated files
+uploads/
+outputs/
+queue.json
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Docker volumes
+pgdata/
+
+# Composer
+composer.phar
+
+# Node
+npm-debug.log*
+yarn-error.log*

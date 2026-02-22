@@ -1,0 +1,18 @@
+{
+  "name": "banner-generator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode=production",
+    "build:admin": "webpack --mode=production --config webpack.admin.js",
+    "dev": "webpack --mode=development --watch"
+  },
+  "devDependencies": {
+    "css-loader": "^6.10.0",
+    "mini-css-extract-plugin": "^2.8.0",
+    "null-loader": "^4.0.1",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

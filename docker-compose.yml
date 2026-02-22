@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: banner_user
+      POSTGRES_PASSWORD: banner_pass
+      POSTGRES_DB: banner_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # PHP + Nginx web server
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+      - ./.env:/var/www/.env
+      - vendor_data:/var/www/vendor
+      - ./uploads:/var/www/html/uploads
+      - ./outputs:/var/www/html/outputs
+    environment:
+      DATABASE_URL: postgres://banner_user:banner_pass@db:5432/banner_db
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-YOUR_BOT_TOKEN_HERE}
+      TELEGRAM_BOT_TOKEN_COLDBET: ${TELEGRAM_BOT_TOKEN_COLDBET:-YOUR_BOT_TOKEN_HERE}
+      TELEGRAM_BOT_TOKEN_SPINBETTER: ${TELEGRAM_BOT_TOKEN_SPINBETTER:-YOUR_BOT_TOKEN_HERE}
+      APP_URL: ${APP_URL:-}
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASS: ${ADMIN_PASS:-admin}
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
+  vendor_data:
