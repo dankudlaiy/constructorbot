@@ -61,7 +61,7 @@ else
 fi
 
 echo "[6/7] Building frontend assets..."
-npm install && npm run build
+npm install && npm run build && npm run build:admin
 cd miniapp && npm install && npm run build && cd ..
 
 # 7. Build and start
