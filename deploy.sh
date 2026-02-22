@@ -51,8 +51,21 @@ else
     echo "[4/5] .env already exists."
 fi
 
-# 5. Build and start
-echo "[5/5] Building and starting services..."
+# 5. Install Node.js and build frontend
+if ! command -v node &> /dev/null; then
+    echo "[5/7] Installing Node.js..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+else
+    echo "[5/7] Node.js already installed."
+fi
+
+echo "[6/7] Building frontend assets..."
+npm install && npm run build
+cd miniapp && npm install && npm run build && cd ..
+
+# 7. Build and start
+echo "[7/7] Building and starting services..."
 docker compose -f docker-compose.prod.yml up -d --build
 
 echo ""
